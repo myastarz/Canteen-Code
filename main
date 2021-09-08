@@ -1,0 +1,85 @@
+<?php
+$con = mysqli_connect("localhost", "teomy", "smartpencil62", "teomy_cafe");
+if(mysqli_connect_errno()){
+    echo "Failed to connect to MySQL:".mysqli_connect_error(); die();}
+else{
+    echo "connected to database";
+}
+
+$all_drinks_query = "SELECT drinksID, drinksName FROM drinks";
+$all_drinks_result = mysqli_query($con, $all_drinks_query);
+$all_food_query = "SELECT foodID, foodName FROM food";
+$all_food_result = mysqli_query($con, $all_food_query);
+$all_specials_query = "SELECT specialID, specialName FROM specials";
+$all_specials_result = mysqli_query($con, $all_specials_query);
+
+?>
+
+<!DOCTYPE html>
+
+<html land="en">
+<head>
+    <title> WGC Canteen </title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+<header>
+    <h1> Cafe </h1>
+    <nav>
+        <ul>
+            <li><a href="main.php"> Home </a></li>
+            <li><a href="drinks.php"> Drinks </a></li>
+            <li><a href="food.php"> Food </a></li>
+            <li><a href="specials.php"> Specials </a></li>
+        </ul>
+    </nav>
+</header>
+</body>
+
+<main>
+    <form name='specials_form' id='specials_form' method = 'get' action = 'specials.php'>
+        <select id = 'special' name = 'specials'>
+            <?php
+            while($all_specials_record = mysql_fetch_assoc($all_specials_result)){
+                echo "<option value = ' ". $all_specials_record['specialsID'] . "'>";
+    echo $all_specials_record['Item'];
+    echo "</option>";
+            }
+            ?>
+
+        </select>
+
+        <input type='submit' name='specials_button' value='Show me the specials list'>
+    </form>
+    <form name='drinks_form' id='drinks_form' method = 'get' action = 'drinks.php'>
+        <select id = 'drinks' name = 'drinks'>
+            <?php
+            while($all_drinks_record = mysql_fetch_assoc($all_drinks_result)){
+                echo "<option value = ' ". $all_drinks_record['drinksID'] . "'>";
+                echo $all_drinks_record['Item'];
+                echo "</option>";
+            }
+            ?>
+        </select>
+
+        <input type='submit' name='drinks_button' value='Show me the drink list'>
+    </form>
+
+    <form name='food_form' id='food_form' method = 'get' action = 'food.php'>
+        <select id ='food' name ='food'>
+<?php
+while($all_food_record = mysql_fetch_assoc($all_food_result)){
+    echo "<option value = ' ". $all_food_record['foodID'] . "'>";
+    echo $all_food_record['Item'];
+    echo "</option>";
+    }
+    ?>
+        </select>
+
+        <input type='submit' name='food_button' value='Show me the food list'>
+    </form>
+</main>
+
+
