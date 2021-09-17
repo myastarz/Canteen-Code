@@ -1,0 +1,67 @@
+<?php
+$con = mysqli_connect("localhost", "teomy", "smartpencil62", "teomy_internal_1");
+if(mysqli_connect_errno()){
+    echo "Failed to connect to MySQL:".mysqli_connect_error(); die();}
+else{
+    echo "connected to database";
+}
+
+$all_drinks_query = "SELECT drinksID, drinksName FROM drinks";
+$all_drinks_result = mysqli_query($con, $all_drinks_query);
+
+$this_drink_query = "SELECT drinksName, drinksPrice FROM drinks WHERE drinksID = '" .$_GET['drinks'] . "'";
+$this_drink_result = mysqli_query($con, $this_drink_query);
+$this_drink_record = mysqli_fetch_assoc($this_drink_result);
+
+?>
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title> WGC Canteen </title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+<header>
+    <h1> Canteen </h1>
+    <nav>
+        <ul>
+            <li><a href="main.php"> Home </a></li>
+            <li><a href="drinks.php"> Drinks </a></li>
+            <li><a href="food.php"> Food </a></li>
+            <li><a href="specials.php"> Specials </a></li>
+        </ul>
+    </nav>
+</header>
+</body>
+
+<main>
+    <h2>Drinks Page</h2>
+    <?php
+
+echo "<p> Drinks Name: " . $this_drink_record['drinksName'] . "<br>";
+echo "<p> Cost: " . $this_drink_record['drinksPrice'] . "<br>";
+
+?>
+
+    <h2>Select another drink</h2>
+
+    </form>
+    <form name='drinks_form' id='drinks_form' method = 'get' action = 'drinks.php'>
+        <select id = 'drinks' name = 'drinks'>
+            <?php
+            while($all_drinks_record = mysqli_fetch_assoc($all_drinks_result)){
+                echo "<option value = '". $all_drinks_record['drinksID'] . "'>";
+                echo $all_drinks_record['drinksName'];
+                echo "</option>";
+            }
+            ?>
+        </select>
+
+        <input type='submit' name='drinks_button' value='Show me the drink list'>
+    </form>
+
+</main>
