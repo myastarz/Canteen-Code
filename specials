@@ -1,0 +1,78 @@
+<?php
+$con = mysqli_connect("localhost", "teomy", "smartpencil62", "teomy_internal_1");
+if(mysqli_connect_errno()){
+    echo "Failed to connect to MySQL:".mysqli_connect_error(); die();}
+else{
+    echo "connected to database";
+}
+
+$all_drinks_query = "SELECT drinksID, drinksName FROM drinks";
+$all_drinks_result = mysqli_query($con, $all_drinks_query);
+$all_food_query = "SELECT FoodID, FoodName FROM food";
+$all_food_result = mysqli_query($con, $all_food_query);
+$all_specials_query = "SELECT SpecialsID, SpecialsDay FROM specials";
+$all_specials_result = mysqli_query($con, $all_specials_query);
+$all_drinks_query = "SELECT drinksID, drinksName FROM drinks";
+$all_drinks_result = mysqli_query($con, $all_drinks_query);
+
+
+if(isset($_Get['specials'])) {
+    $id = $_Get['specials'];
+}else{
+    $id = 1;
+}
+
+
+$this_specials_query = "SELECT SpecialsDay, SpecialsFood FROM specials WHERE SpecialsID = '" .$id . "'";
+$this_specials_result = mysqli_query($con, $this_specials_query);
+$this_specials_record = mysqli_fetch_assoc($this_specials_result);
+?>
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title> WGC Canteen </title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+<header>
+    <h1> Canteen </h1>
+    <nav>
+        <ul>
+            <li><a href="main.php"> Home </a></li>
+            <li><a href="drinks.php"> Drinks </a></li>
+            <li><a href="food.php"> Food </a></li>
+            <li><a href="specials.php"> Specials </a></li>
+        </ul>
+    </nav>
+</header>
+</body>
+
+<main>
+    <h2>Specials Page</h2>
+    <?php
+
+    echo "<p> Specials Day: " . $this_specials_record['SpecialsDay'] . "<br>";
+    echo "<p> Specials Food: " . $this_specials_record['SpecialsFood'] . "<br>";
+
+    ?>
+
+    <h2>See another specials day</h2>
+    <form name='specials_form' id='specials_form' method = 'get' action = 'specials.php'>
+        <select id = 'special' name = 'specials'>
+            <?php
+            while($all_specials_record = mysqli_fetch_assoc($all_specials_result)){
+                echo "<option value = '". $all_specials_record['SpecialsID'] . "'>";
+                echo $all_specials_record['SpecialsDay'];
+                echo "</option>";
+            }
+            ?>
+
+        </select>
+
+        <input type='submit' name='specials_button' value='Show me the specials list'>
+
+</main>
