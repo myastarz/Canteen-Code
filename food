@@ -1,0 +1,81 @@
+<?php
+$con = mysqli_connect("localhost", "teomy", "smartpencil62", "teomy_internal_1");
+if(mysqli_connect_errno()){
+    echo "Failed to connect to MySQL:".mysqli_connect_error(); die();}
+else{
+    echo "connected to database";
+}
+
+$all_drinks_query = "SELECT drinksID, drinksName FROM drinks";
+$all_drinks_result = mysqli_query($con, $all_drinks_query);
+$all_food_query = "SELECT FoodID, FoodName FROM food";
+$all_food_result = mysqli_query($con, $all_food_query);
+$all_specials_query = "SELECT SpecialsID, SpecialsDay FROM specials";
+$all_specials_result = mysqli_query($con, $all_specials_query);
+
+$all_drinks_query = "SELECT drinksID, drinksName FROM drinks";
+$all_drinks_result = mysqli_query($con, $all_drinks_query);
+
+
+if(isset($_Get['food'])) {
+    $id = $_Get['food'];
+}else{
+    $id = 1;
+}
+
+
+$this_food_query = "SELECT FoodName, FoodPrice FROM food WHERE foodID = '" .$id . "'";
+$this_food_result = mysqli_query($con, $this_food_query);
+$this_food_record = mysqli_fetch_assoc($this_food_result);
+
+?>
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <title> WGC Canteen </title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+<header>
+    <h1> Canteen </h1>
+    <nav>
+        <ul>
+            <li><a href="main.php"> Home </a></li>
+            <li><a href="drinks.php"> Drinks </a></li>
+            <li><a href="food.php"> Food </a></li>
+            <li><a href="specials.php"> Specials </a></li>
+        </ul>
+    </nav>
+</header>
+</body>
+
+
+<main>
+    <h2>Food page</h2>
+    <?php
+
+    echo "<p> Food Name: " . $this_food_record['FoodName'] . "<br>";
+    echo "<p> Cost: " . $this_food_record['FoodPrice'] . "<br>";
+
+    ?>
+
+    <h2>Select another food</h2>
+    <form name='food_form' id='food_form' method = 'get' action = 'food.php'>
+        <select id ='food' name ='food'>
+            <?php
+            while($all_food_record = mysqli_fetch_assoc($all_food_result)){
+                echo "<option value = ' ". $all_food_record['FoodID'] . "'>";
+                echo $all_food_record['FoodName'];
+                echo "</option>";
+            }
+            ?>
+        </select>
+
+        <input type='submit' name='food_button' value='Show me the food list'>
+    </form>
+
+</main>
